@@ -3,35 +3,43 @@
 		    <h3>Choose a Specialty</h3>
 		    <div class="checkbox-grp">
 		    	<div>
-		    		<input type="checkbox" name="specialty" id="pizza" value="restaurant, pizza">
+		    		<!-- <input type="checkbox" name="specialty" id="pizza" value="restaurant, pizza"> -->
+		    		<input type="checkbox" name="specialty" id="pizza" ng-model="specialty.pizza" ng-true-value="'restaurant, pizza'" ng-false-value="'pizza'"ng-change="getSpecialty(specialty.pizza)">
 			    	<label for="pizza">Pizza</label>
 		    	</div>
 		    	<div>
-		    		<input type="checkbox" name="specialty" id="pasta" value="restaurant, pasta">
+		    		<!-- <input type="checkbox" name="specialty" id="pasta" value="restaurant, pasta"> -->
+		    		<input type="checkbox" name="specialty" id="pasta" ng-model="specialty.pasta" ng-true-value="'restaurant, pasta'" ng-false-value="'pasta'" ng-change="getSpecialty(specialty.pasta)">
 			    	<label for="pasta">Pasta</label>
 		    	</div>
 		    	<div>
-		    		<input type="checkbox" name="specialty" id="chicken" value="restaurant, chicken">
+		    		<!-- <input type="checkbox" name="specialty" id="chicken" value="restaurant, chicken"> -->
+		    		<input type="checkbox" name="specialty" id="chicken" ng-model="specialty.chicken" ng-true-value="'restaurant, chicken'" ng-false-value="'chicken'" ng-change="getSpecialty(specialty.chicken)">
 				<label for="chicken">Chicken</label>
 		    	</div>
 				<div>
-					<input type="checkbox" name="specialty" id="pastry" value="restaurant, pastry">
+					<!-- <input type="checkbox" name="specialty" id="pastry" value="restaurant, pastry"> -->
+					<input type="checkbox" name="specialty" id="pastry" ng-model="specialty.pastry" ng-true-value="'restaurant, pastry'" ng-false-value="'pastry'" ng-change="getSpecialty(specialty.pastry)">
 					<label for="pastry">Pastry</label>
 				</div>
 				<div>
-					<input type="checkbox" name="specialty" id="desserts" value="restaurant, desserts">
+					<!-- <input type="checkbox" name="specialty" id="desserts" value="restaurant, desserts"> -->
+					<input type="checkbox" name="specialty" id="desserts" ng-model="specialty.desserts" ng-true-value="'restaurant, desserts'" ng-false-value="'desserts'"  ng-change="getSpecialty(specialty.desserts)">
 					<label for="desserts">Desserts</label>
 				</div>
 				<div>
-					<input type="checkbox" name="specialty" id="coffee" value="restaurant, coffee">
+					<!-- <input type="checkbox" name="specialty" id="coffee" value="restaurant, coffee"> -->
+					<input type="checkbox" name="specialty" id="coffee" ng-model="specialty.coffee" ng-true-value="'restaurant, coffee'" ng-false-value="'coffee'" ng-change="getSpecialty(specialty.coffee)">
 					<label for="coffee">Coffee</label>
 				</div>
 				<div>
-					<input type="checkbox" name="specialty" id="japanese" value="restaurant, japanese">
+					<!-- <input type="checkbox" name="specialty" id="japanese" value="restaurant, japanese"> -->
+					<input type="checkbox" name="specialty" id="japanese" ng-model="specialty.japanese" ng-true-value="'restaurant, japanese'" ng-false-value="'japanese'" ng-change="getSpecialty(specialty.japanese)">
 					<label for="japanese">Japanese</label>
 				</div>
 				<div>
-					<input type="checkbox" name="specialty" id="korean" value="restaurant, korean">
+					<!-- <input type="checkbox" name="specialty" id="korean" value="restaurant, korean"> -->
+					<input type="checkbox" name="specialty" id="korean" ng-model="specialty.korean" ng-true-value="'restaurant, korean'" ng-false-value="'korean'" ng-change="getSpecialty(specialty.korean)">
 					<label for="korean">Korean</label>
 				</div>
 		    </div>

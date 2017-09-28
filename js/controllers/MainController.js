@@ -5,6 +5,7 @@
 
 	var MainController = function($scope, mapsApi){
 		$scope.initialize = function() {
+			console.log("in initialize");
 			//infoBox plugin
 			var s = document.createElement("script");
 			s.type = "text/javascript";
@@ -12,11 +13,23 @@
 			document.head.appendChild(s);
 			//---------------------------------------
 
+			$scope.specialty = {};
+			$scope.getSpecialty = _getSpecialty;
 			var map;
 			var data = [];
 			var compiledData = [];
 			var currentSearch;
 			var masterPlaces;
+			var markers = {
+				pizza: [],
+				pasta: [],
+				chicken: [],
+				pastry: [],
+				desserts: [],
+				coffee: [],
+				japanese: [],
+				korean: []
+			};
 			var places = {
 				pizza: [],
 				pasta: [],
@@ -29,9 +42,12 @@
 			};
 			var cebuLatLng = mapsApi.newLatLng(10.3226903, 123.8975747);
 			var drawingManager = mapsApi.newDrawingManager();
+			var infowindow = mapsApi.newInfoWindow();
 			var createCircle = _createCircle;
 			var getPlaces = _getPlaces;
 			var getResponse = _getResponse;
+			var plotRestaurants = _plotRestaurants;
+			var removeMarkers = _removeMarkers;
 			var placesService;
 
 			var loadMap = function(){
@@ -52,6 +68,7 @@
 			        createCircle(center, radius, map);
 				});
 
+				plotRestaurants();
 			};
 			loadMap();
 			//-------------------------------
@@ -83,13 +100,14 @@
 						$('#floating-panel').removeClass('hidden');
 
 					});
-					loadMap();
+					// loadMap();
+					plotRestaurants();
 				} else {
-					$(document).ready(function(){
-						$('.load-msg').removeClass('hidden');
-						$('#floating-panel').addClass('hidden');
+					// $(document).ready(function(){
+					// 	$('.load-msg').removeClass('hidden');
+					// 	$('#floating-panel').addClass('hidden');
 
-					});
+					// });
 					placesService.textSearch(request, getResponse);
 				}
 			}
@@ -137,6 +155,11 @@
 						}
 					}
 
+					if(!data.length){
+						data = places[currentSearch];
+					}
+					plotRestaurants();
+
 					if (pagination.hasNextPage) {
 						pagination.nextPage();
 					} else {
@@ -154,7 +177,7 @@
 							data = data.concat(places[currentSearch]);
 							// console.log(data);
 						}
-						loading = false;
+						// loading = false;
 						compiledData = [];
 						currentSearch = null;
 						$(document).ready(function(){
@@ -162,9 +185,161 @@
 							$('#floating-panel').removeClass('hidden');
 
 						});
-						loadMap();
+						// loadMap();
 					}
 				}
+			}
+
+			function _plotRestaurants() {
+				var marker;
+				// markers[currentSearch] = [];
+
+				for (var i = 0; i < data.length; i++) {
+
+					marker = mapsApi.newMarker(data[i].geometry.location, map);
+
+					mapsApi.mapAddListener(marker,'click', (function(marker,data,infowindow){
+				        return function() {
+							   this.visited++;
+							   var content = '<div class="infowindow-content"><div class="place-name"><strong>' + data.name + '</strong></div>' +
+					                '<div class="place-info">' + data.formatted_address + '<br>' +
+					                '<span>Visited <strong>' + this.visited + '</strong>' + (this.visited > 1 ? ' times.' : ' time.') + '</span><br>' +
+					                '<a href="#" class="place-details" data-placeid="'+ data.place_id + '">See place details</a>' + '</div>' +
+					                '<button class="get-directions" data-lat="' +  data.geometry.location.lat() +
+					                '" data-lng="' + data.geometry.location.lng() + '">Get Directions</button>' +
+					                ' </div>';
+					           infowindow.setContent(content);
+					           infowindow.open(map,marker);
+					           map.panTo(marker.getPosition());
+					           $(document).ready(function(){
+					           		$('#details-panel').addClass('hidden');
+					           });
+					        };
+					    })(marker,data[i],infowindow));
+
+					// console.log("markers." + currentSearch + ": " + markers[currentSearch].length);
+					markers[currentSearch].push(marker);
+				}
+
+				// var markerCluster = new MarkerClusterer(map, markers, { imagePath: 'img/'});
+
+				// mapsApi.mapAddListener(markerCluster, 'clusterclick', function(e) {
+				//     $(document).ready(function(){
+			 //           	$('#details-panel').addClass('hidden');
+			 //        });
+				// });
+
+				mapsApi.mapAddListener(infowindow, 'closeclick', function(e){
+					$(document).ready(function(){
+			           	$('#details-panel').addClass('hidden');
+			        });
+				});
+
+				// reset data holders
+				// data = [];
+				// compiledData = [];
+			}
+
+			function _getSpecialty (specialty){
+		    	if(!specialty.indexOf("restaurant")){
+		    		getPlaces(specialty, specialty.substr(specialty.indexOf(", ") + 2));
+		    	} else {
+		    		data = [];
+		            switch(specialty) {
+						case "pizza":
+							places.pizza = [];
+							data = data.concat(places.pasta)
+								.concat(places.chicken)
+								.concat(places.pastry)
+								.concat(places.desserts)
+								.concat(places.coffee)
+								.concat(places.japanese)
+								.concat(places.korean);
+							break;
+						case "pasta":
+							places.pasta = [];
+							data = data.concat(places.pizza)
+								.concat(places.chicken)
+								.concat(places.pastry)
+								.concat(places.desserts)
+								.concat(places.coffee)
+								.concat(places.japanese)
+								.concat(places.korean);
+							break;
+						case "chicken":
+							places.chicken = [];
+							data = data.concat(places.pizza)
+								.concat(places.pasta)
+								.concat(places.pastry)
+								.concat(places.desserts)
+								.concat(places.coffee)
+								.concat(places.japanese)
+								.concat(places.korean);
+							break;
+						case "pastry":
+							places.pastry = [];
+							data = data.concat(places.pizza)
+								.concat(places.pasta)
+								.concat(places.chicken)
+								.concat(places.desserts)
+								.concat(places.coffee)
+								.concat(places.japanese)
+								.concat(places.korean);
+							break;
+						case "desserts":
+							places.desserts = [];
+							data = data.concat(places.pizza)
+								.concat(places.pasta)
+								.concat(places.chicken)
+								.concat(places.pastry)
+								.concat(places.coffee)
+								.concat(places.japanese)
+								.concat(places.korean);
+							break;
+						case "coffee":
+							places.coffee = [];
+							data = data.concat(places.pizza)
+								.concat(places.pasta)
+								.concat(places.chicken)
+								.concat(places.pastry)
+								.concat(places.desserts)
+								.concat(places.japanese)
+								.concat(places.korean);
+							break;
+						case "japanese":
+							places.japanese = [];
+							data = data.concat(places.pizza)
+								.concat(places.pasta)
+								.concat(places.chicken)
+								.concat(places.pastry)
+								.concat(places.desserts)
+								.concat(places.coffee)
+								.concat(places.korean);
+							break;
+						case "korean":
+							places.korean = [];
+							data = data.concat(places.pizza)
+								.concat(places.pasta)
+								.concat(places.chicken)
+								.concat(places.pastry)
+								.concat(places.desserts)
+								.concat(places.coffee)
+								.concat(places.japanese);
+							break;
+						default:
+							break;
+					}
+					console.log(markers[specialty].length);
+					removeMarkers(specialty);
+					// loadMap();
+		    	}
+		    }
+
+		    function _removeMarkers(specialty){
+			    for(var i=0; i<markers[specialty].length; i++){
+			        markers[specialty][i].setMap(null);
+			    }
+			    markers[specialty] = [];
 			}
 
 	    };

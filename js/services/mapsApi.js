@@ -69,6 +69,14 @@
 				    });
 	    };
 
+	    var newMarker = function(location, map){
+	    	return new google.maps.Marker({
+						position: location,
+						map: map,
+						visited: 0
+					});
+	    };
+
 	    return {
 	    	newMap: newMap,
 	    	newLatLng: newLatLng,
@@ -78,7 +86,8 @@
 	    	newDirectionsDisplay: newDirectionsDisplay,
 	    	newDrawingManager: newDrawingManager,
 	    	mapAddListener: mapAddListener,
-	    	newCircle: newCircle
+	    	newCircle: newCircle,
+	    	newMarker: newMarker
 	    };
 	};
 
