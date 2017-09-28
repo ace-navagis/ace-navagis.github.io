@@ -116,37 +116,55 @@
 				if (status == google.maps.places.PlacesServiceStatus.OK) {
 					if(compiledData.length === 0) {
 						compiledData = results;
+						data = results;
+						plotRestaurants();
 					} else {
 						switch(currentSearch) {
 							case "pizza":
+								data = results;
+								plotRestaurants();
 								places.pizza = compiledData.concat(results);
 								compiledData = places.pizza;
 								break;
 							case "pasta":
+								data = results;
+								plotRestaurants();
 								places.pasta = compiledData.concat(results);
 								compiledData = places.pasta;
 								break;
 							case "chicken":
+								data = results;
+								plotRestaurants();
 								places.chicken = compiledData.concat(results);
 								compiledData = places.chicken;
 								break;
 							case "pastry":
+								data = results;
+								plotRestaurants();
 								places.pastry = compiledData.concat(results);
 								compiledData = places.pastry;
 								break;
 							case "desserts":
+								data = results;
+								plotRestaurants();
 								places.desserts = compiledData.concat(results);
 								compiledData = places.desserts;
 								break;
 							case "coffee":
+								data = results;
+								plotRestaurants();
 								places.coffee = compiledData.concat(results);
 								compiledData = places.coffee;
 								break;
 							case "japanese":
+								data = results;
+								plotRestaurants();
 								places.japanese = compiledData.concat(results);
 								compiledData = places.japanese;
 								break;
 							case "korean":
+								data = results;
+								plotRestaurants();
 								places.korean = compiledData.concat(results);
 								compiledData = places.korean;
 								break;
@@ -155,28 +173,24 @@
 						}
 					}
 
-					if(!data.length){
-						data = places[currentSearch];
-					}
-					plotRestaurants();
-
 					if (pagination.hasNextPage) {
 						pagination.nextPage();
 					} else {
 						console.log('done getting all data.');
 						// console.log(places);
 						if(!masterPlaces) {
-							masterPlaces = jQuery.extend(true, {}, places);
+							// masterPlaces = jQuery.extend(true, {}, places);
+							masterPlaces = 	angular.copy(places);
 						} else {
 							masterPlaces[currentSearch] = places[currentSearch];
 						}
-						if(data.length === 0) {
-							data = places[currentSearch];
-							// console.log(data);
-						} else {
-							data = data.concat(places[currentSearch]);
-							// console.log(data);
-						}
+						// if(data.length === 0) {
+						// 	data = places[currentSearch];
+						// 	// console.log(data);
+						// } else {
+						// 	data = data.concat(places[currentSearch]);
+						// 	// console.log(data);
+						// }
 						// loading = false;
 						compiledData = [];
 						currentSearch = null;
@@ -192,7 +206,6 @@
 
 			function _plotRestaurants() {
 				var marker;
-				// markers[currentSearch] = [];
 
 				for (var i = 0; i < data.length; i++) {
 
