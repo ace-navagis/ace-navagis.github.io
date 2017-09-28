@@ -15,6 +15,7 @@
 
 			$scope.specialty = {};
 			$scope.getSpecialty = _getSpecialty;
+			$scope.loading = false;
 			var map;
 			var data = [];
 			var compiledData = [];
@@ -68,7 +69,7 @@
 			        createCircle(center, radius, map);
 				});
 
-				plotRestaurants();
+				// plotRestaurants();
 			};
 			loadMap();
 			//-------------------------------
@@ -108,6 +109,7 @@
 					// 	$('#floating-panel').addClass('hidden');
 
 					// });
+					$scope.loading = true;
 					placesService.textSearch(request, getResponse);
 				}
 			}
@@ -177,6 +179,9 @@
 						pagination.nextPage();
 					} else {
 						console.log('done getting all data.');
+						$scope.$evalAsync(function () {
+							$scope.loading = false;
+						});
 						// console.log(places);
 						if(!masterPlaces) {
 							// masterPlaces = jQuery.extend(true, {}, places);
@@ -191,7 +196,6 @@
 						// 	data = data.concat(places[currentSearch]);
 						// 	// console.log(data);
 						// }
-						// loading = false;
 						compiledData = [];
 						currentSearch = null;
 						$(document).ready(function(){
@@ -342,7 +346,7 @@
 						default:
 							break;
 					}
-					console.log(markers[specialty].length);
+					// console.log(markers[specialty].length);
 					removeMarkers(specialty);
 					// loadMap();
 		    	}
