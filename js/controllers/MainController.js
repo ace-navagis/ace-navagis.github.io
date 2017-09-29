@@ -21,6 +21,7 @@
 			var compiledData = [];
 			var currentSearch;
 			var masterPlaces;
+			var masterMarkers = [];
 			var markers = {
 				pizza: [],
 				pasta: [],
@@ -49,6 +50,7 @@
 			var getResponse = _getResponse;
 			var plotRestaurants = _plotRestaurants;
 			var removeMarkers = _removeMarkers;
+			var placeMarkers = _placeMarkers;
 			var placesService;
 
 			var loadMap = function(){
@@ -75,7 +77,79 @@
 			//-------------------------------
 
 			function _createCircle(center, radius, map){
+
+				var circleLabel;
+				var labelOptions = {
+					content: "",
+					boxStyle: {
+					  border: "none",
+					  textAlign: "center",
+					  fontSize: "40px",
+					  fontWeight: "700",
+					  width: "50px",
+					  color: '#d74246'
+					},
+					disableAutoPan: true,
+					pixelOffset: new google.maps.Size(-25, 7),
+					position: null,
+					closeBoxURL: "",
+					isHidden: false,
+					pane: "floatPane",
+					enableEventPropagation: true
+				};
 				var circle = mapsApi.newCircle(center, radius, map);
+
+				var counter = 0;
+				for (var i = 0; i < masterMarkers.length; i++) {
+					if (circle.getBounds().contains(masterMarkers[i].getPosition())) {
+						counter++;
+					}
+				}
+
+				labelOptions.content = counter.toString();
+				labelOptions.position = circle.getCenter();
+				circleLabel = new InfoBox(labelOptions);
+				circleLabel.open(map);
+
+				mapsApi.mapAddListener(circle, 'radius_changed', function (event) {
+
+			    	if(circleLabel){
+		                circleLabel.close();
+		            }
+
+			        var counter = 0;
+			        for (var i = 0; i < masterMarkers.length; i++) {
+						if (circle.getBounds().contains(masterMarkers[i].getPosition())) {
+							counter++;
+						}
+					}
+
+					labelOptions.content = counter.toString();
+					labelOptions.position = circle.getCenter();
+					circleLabel = new InfoBox(labelOptions);
+					circleLabel.open(map);
+			    });
+
+			    mapsApi.mapAddListener(circle, 'center_changed', function (event) {
+
+			        if(circleLabel){
+		                circleLabel.close();
+		            }
+
+			        var counter = 0;
+			        console.log(masterMarkers.length);
+			        for (var i = 0; i < masterMarkers.length; i++) {
+						if (circle.getBounds().contains(masterMarkers[i].getPosition())) {
+							counter++;
+						}
+					}
+
+					labelOptions.content = counter.toString();
+					labelOptions.position = circle.getCenter();
+					circleLabel = new InfoBox(labelOptions);
+					circleLabel.open(map);
+			    });
+
 			}
 
 			function _getPlaces (type, id){
@@ -102,7 +176,8 @@
 
 					});
 					// loadMap();
-					plotRestaurants();
+					// plotRestaurants();
+					placeMarkers(currentSearch);
 				} else {
 					// $(document).ready(function(){
 					// 	$('.load-msg').removeClass('hidden');
@@ -196,6 +271,7 @@
 						// 	data = data.concat(places[currentSearch]);
 						// 	// console.log(data);
 						// }
+						data = [];
 						compiledData = [];
 						currentSearch = null;
 						$(document).ready(function(){
@@ -236,6 +312,7 @@
 
 					// console.log("markers." + currentSearch + ": " + markers[currentSearch].length);
 					markers[currentSearch].push(marker);
+					masterMarkers.push(marker);
 				}
 
 				// var markerCluster = new MarkerClusterer(map, markers, { imagePath: 'img/'});
@@ -251,7 +328,7 @@
 			           	$('#details-panel').addClass('hidden');
 			        });
 				});
-
+				console.log(markers[currentSearch]);
 				// reset data holders
 				// data = [];
 				// compiledData = [];
@@ -355,8 +432,23 @@
 		    function _removeMarkers(specialty){
 			    for(var i=0; i<markers[specialty].length; i++){
 			        markers[specialty][i].setMap(null);
+			        for(var x=0; x<masterMarkers.length; x++){
+			        	if(markers[specialty][i].getPosition().equals(masterMarkers[x].getPosition())){
+			        		masterMarkers.splice(masterMarkers.indexOf(masterMarkers[x]), 1);
+			        		console.log("removed marker in masterMarkers");
+			        	}
+			        }
 			    }
-			    markers[specialty] = [];
+			    // markers[specialty] = [];
+			}
+
+			function _placeMarkers(specialty){
+				// console.log("in place markers" + specialty);
+				// console.log(markers[specialty].length);
+				for(var i=0; i<markers[specialty].length; i++){
+			        markers[specialty][i].setMap(map);
+			        masterMarkers.push(markers[specialty][i]);
+			    }
 			}
 
 	    };
