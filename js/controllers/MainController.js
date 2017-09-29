@@ -3,9 +3,8 @@
 
 	var app = angular.module("mapApp");
 
-	var MainController = function($scope, mapsApi){
+	var MainController = function($scope, $compile, mapsApi){
 		$scope.initialize = function() {
-			console.log("in initialize");
 			//infoBox plugin
 			var s = document.createElement("script");
 			s.type = "text/javascript";
@@ -14,8 +13,12 @@
 			//---------------------------------------
 
 			$scope.specialty = {};
-			$scope.getSpecialty = _getSpecialty;
 			$scope.loading = false;
+			$scope.getSpecialty = _getSpecialty;
+			$scope.getDirections = _getDirections;
+			$scope.test = function(){
+				console.log("test");
+			};
 			var map;
 			var data = [];
 			var compiledData = [];
@@ -52,6 +55,8 @@
 			var removeMarkers = _removeMarkers;
 			var placeMarkers = _placeMarkers;
 			var placesService;
+			var directionsService = mapsApi.newDirections();
+			var directionsDisplay = mapsApi.newDirectionsDisplay();
 
 			var loadMap = function(){
 
@@ -70,8 +75,7 @@
 			        // Create circle
 			        createCircle(center, radius, map);
 				});
-
-				// plotRestaurants();
+				directionsDisplay.setMap(map);
 			};
 			loadMap();
 			//-------------------------------
@@ -137,7 +141,6 @@
 		            }
 
 			        var counter = 0;
-			        console.log(masterMarkers.length);
 			        for (var i = 0; i < masterMarkers.length; i++) {
 						if (circle.getBounds().contains(masterMarkers[i].getPosition())) {
 							counter++;
@@ -257,20 +260,11 @@
 						$scope.$evalAsync(function () {
 							$scope.loading = false;
 						});
-						// console.log(places);
 						if(!masterPlaces) {
-							// masterPlaces = jQuery.extend(true, {}, places);
 							masterPlaces = 	angular.copy(places);
 						} else {
 							masterPlaces[currentSearch] = places[currentSearch];
 						}
-						// if(data.length === 0) {
-						// 	data = places[currentSearch];
-						// 	// console.log(data);
-						// } else {
-						// 	data = data.concat(places[currentSearch]);
-						// 	// console.log(data);
-						// }
 						data = [];
 						compiledData = [];
 						currentSearch = null;
@@ -279,7 +273,6 @@
 							$('#floating-panel').removeClass('hidden');
 
 						});
-						// loadMap();
 					}
 				}
 			}
@@ -298,10 +291,11 @@
 					                '<div class="place-info">' + data.formatted_address + '<br>' +
 					                '<span>Visited <strong>' + this.visited + '</strong>' + (this.visited > 1 ? ' times.' : ' time.') + '</span><br>' +
 					                '<a href="#" class="place-details" data-placeid="'+ data.place_id + '">See place details</a>' + '</div>' +
-					                '<button class="get-directions" data-lat="' +  data.geometry.location.lat() +
-					                '" data-lng="' + data.geometry.location.lng() + '">Get Directions</button>' +
+					                '<button id="get-directions" class="get-directions" data-lat="' +  data.geometry.location.lat() +
+					                '" data-lng="' + data.geometry.location.lng() + '" ng-click="getDirections()">Get Directions</button>' +
 					                ' </div>';
-					           infowindow.setContent(content);
+					           var compiled = $compile(content)($scope);
+					           infowindow.setContent(compiled[0]);
 					           infowindow.open(map,marker);
 					           map.panTo(marker.getPosition());
 					           $(document).ready(function(){
@@ -310,28 +304,15 @@
 					        };
 					    })(marker,data[i],infowindow));
 
-					// console.log("markers." + currentSearch + ": " + markers[currentSearch].length);
 					markers[currentSearch].push(marker);
 					masterMarkers.push(marker);
 				}
-
-				// var markerCluster = new MarkerClusterer(map, markers, { imagePath: 'img/'});
-
-				// mapsApi.mapAddListener(markerCluster, 'clusterclick', function(e) {
-				//     $(document).ready(function(){
-			 //           	$('#details-panel').addClass('hidden');
-			 //        });
-				// });
 
 				mapsApi.mapAddListener(infowindow, 'closeclick', function(e){
 					$(document).ready(function(){
 			           	$('#details-panel').addClass('hidden');
 			        });
 				});
-				console.log(markers[currentSearch]);
-				// reset data holders
-				// data = [];
-				// compiledData = [];
 			}
 
 			function _getSpecialty (specialty){
@@ -423,9 +404,7 @@
 						default:
 							break;
 					}
-					// console.log(markers[specialty].length);
 					removeMarkers(specialty);
-					// loadMap();
 		    	}
 		    }
 
@@ -435,20 +414,54 @@
 			        for(var x=0; x<masterMarkers.length; x++){
 			        	if(markers[specialty][i].getPosition().equals(masterMarkers[x].getPosition())){
 			        		masterMarkers.splice(masterMarkers.indexOf(masterMarkers[x]), 1);
-			        		console.log("removed marker in masterMarkers");
 			        	}
 			        }
 			    }
-			    // markers[specialty] = [];
 			}
 
 			function _placeMarkers(specialty){
-				// console.log("in place markers" + specialty);
-				// console.log(markers[specialty].length);
 				for(var i=0; i<markers[specialty].length; i++){
 			        markers[specialty][i].setMap(map);
 			        masterMarkers.push(markers[specialty][i]);
 			    }
+			}
+
+			function handleLocationError(browserHasGeolocation) {
+			    window.alert(browserHasGeolocation ?
+			                          'Error: The Geolocation service failed.' :
+			                          'Error: Your browser doesn\'t support geolocation.');
+			}
+
+			function _getDirections(){
+				var element = document.getElementById("get-directions");
+				var destinationLat = element.attributes['data-lat'].value;
+				var destinationLng = element.attributes['data-lng'].value;
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(function(position) {
+					var currentLocation = {
+					  lat: position.coords.latitude,
+					  lng: position.coords.longitude
+					};
+
+					directionsService.route({
+						  origin: currentLocation.lat +',' + currentLocation.lng,
+						  destination: destinationLat + ',' + destinationLng,
+						  travelMode: 'DRIVING'
+						}, function(response, status) {
+						  if (status === 'OK') {
+						    directionsDisplay.setDirections(response);
+						  } else {
+						    window.alert('Directions request failed due to ' + status);
+						  }
+						});
+
+					}, function() {
+							handleLocationError(true);
+						});
+					} else {
+						// Browser doesn't support Geolocation
+						handleLocationError(false);
+					}
 			}
 
 	    };
