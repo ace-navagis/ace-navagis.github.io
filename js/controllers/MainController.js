@@ -16,9 +16,7 @@
 			$scope.loading = false;
 			$scope.getSpecialty = _getSpecialty;
 			$scope.getDirections = _getDirections;
-			$scope.test = function(){
-				console.log("test");
-			};
+			$scope.getPlaceDetails = _getPlaceDetails;
 			var map;
 			var data = [];
 			var compiledData = [];
@@ -290,7 +288,7 @@
 							   var content = '<div class="infowindow-content"><div class="place-name"><strong>' + data.name + '</strong></div>' +
 					                '<div class="place-info">' + data.formatted_address + '<br>' +
 					                '<span>Visited <strong>' + this.visited + '</strong>' + (this.visited > 1 ? ' times.' : ' time.') + '</span><br>' +
-					                '<a href="#" class="place-details" data-placeid="'+ data.place_id + '">See place details</a>' + '</div>' +
+					                '<a href="" id="place-details" class="place-details" data-placeid="'+ data.place_id + '" ng-click="getPlaceDetails()">See place details</a>' + '</div>' +
 					                '<button id="get-directions" class="get-directions" data-lat="' +  data.geometry.location.lat() +
 					                '" data-lng="' + data.geometry.location.lng() + '" ng-click="getDirections()">Get Directions</button>' +
 					                ' </div>';
@@ -462,6 +460,132 @@
 						// Browser doesn't support Geolocation
 						handleLocationError(false);
 					}
+			}
+
+			function _getPlaceDetails(){
+				var element = document.getElementById("place-details");
+				var request = {
+				  placeId: element.attributes['data-placeid'].value
+				};
+
+				placesService.getDetails(request, function(place, status) {
+					if (status == google.maps.places.PlacesServiceStatus.OK) {
+
+						var infotxt = '<div class="info-name">' + place.name + '</div>' +
+										'<div class="info-rating">' + (place.rating ? 'Rating: <span>' + place.rating + '</span> out of 5' : "Not rated yet.") + '</div>' +
+										'<div class="info-address">' + place.formatted_address + '</div>' +
+										'<div class="info-phone"> Phone: ' + (place.formatted_phone_number ? place.formatted_phone_number : 'Not available.') + '</div>' +
+										'<div id="chartContainer"></div>';
+						if(place.opening_hours) {
+							var infoscheds = '<div class="infosched-block">';
+							for(var x = 0; x < place.opening_hours.weekday_text.length; x++) {
+								infoscheds = infoscheds.concat('<div><span class="circle-bullet"></span>' + place.opening_hours.weekday_text[x] + '</div>');
+							}
+							infoscheds = infoscheds.concat('</div>');
+
+							var openhrs =  '<div class="sched-text"><p>Schedules:</p>' + '' + '</div>';
+							var openstatus = '<div class="open-status">' + (place.opening_hours.open_now ? 'Currently open.' : 'Currently closed.') + '</div>';
+							infotxt = infotxt.concat(openhrs);
+							infotxt = infotxt.concat(infoscheds);
+							infotxt = infotxt.concat(openstatus);
+						}
+
+						if(place.reviews) {
+							var reviewinfo = '<div class="reviewinfo-group"><p>Customer Reviews:</p>';
+							for(var i = 0; i < place.reviews.length; i++) {
+								reviewinfo = reviewinfo.concat('<div class="review-block">' +
+											'<div class="rname">' +  place.reviews[i].author_name +'</div>' +
+											'<div class="rtext">' +  (place.reviews[i].text ? '"' + place.reviews[i].text + '"' : place.reviews[i].text) +'</div>' +
+											'<div class="rrating">Rating: ' +  place.reviews[i].rating +' out of 5.</div>' +
+								'</div>');
+							}
+							reviewinfo = reviewinfo.concat('</div>');
+							infotxt = infotxt.concat(reviewinfo);
+						}
+
+						$('#details-panel').empty();
+						$('#details-panel').append(infotxt);
+						$('#details-panel').scrollTop(20);
+						setTimeout(function() {
+					        $('#details-panel').scrollTop(0);
+					    }, 15);
+					    FusionCharts.ready(function(){
+						    var revenueChart = new FusionCharts({
+						        "type": "column2d",
+						        "renderAt": "chartContainer",
+						        "width": "300",
+						        "height": "300",
+						        "dataFormat": "json",
+						        "dataSource":  {
+						          "chart": {
+						            "caption": "Monthly revenue for last year",
+						            // "subCaption": place.name,
+						            "xAxisName": "Month",
+						            // "yAxisName": "Revenues (In PHP)",
+						            "theme": "fint"
+						         },
+						         "data": [
+						            {
+						               "label": "Jan",
+						               "value": Math.floor(Math.random() * (850000 - 400000 + 1) ) + 400000
+						            },
+						            {
+						               "label": "Feb",
+						               "value": Math.floor(Math.random() * (850000 - 400000 + 1) ) + 400000
+						            },
+						            {
+						               "label": "Mar",
+						               "value": Math.floor(Math.random() * (850000 - 400000 + 1) ) + 400000
+						            },
+						            {
+						               "label": "Apr",
+						               "value": Math.floor(Math.random() * (850000 - 400000 + 1) ) + 400000
+						            },
+						            {
+						               "label": "May",
+						               "value": Math.floor(Math.random() * (850000 - 400000 + 1) ) + 400000
+						            },
+						            {
+						               "label": "Jun",
+						               "value": Math.floor(Math.random() * (850000 - 400000 + 1) ) + 400000
+						            },
+						            {
+						               "label": "Jul",
+						               "value": Math.floor(Math.random() * (850000 - 400000 + 1) ) + 400000
+						            },
+						            {
+						               "label": "Aug",
+						               "value": Math.floor(Math.random() * (850000 - 400000 + 1) ) + 400000
+						            },
+						            {
+						               "label": "Sep",
+						               "value": Math.floor(Math.random() * (850000 - 400000 + 1) ) + 400000
+						            },
+						            {
+						               "label": "Oct",
+						               "value": Math.floor(Math.random() * (850000 - 400000 + 1) ) + 400000
+						            },
+						            {
+						               "label": "Nov",
+						               "value": Math.floor(Math.random() * (850000 - 400000 + 1) ) + 400000
+						            },
+						            {
+						               "label": "Dec",
+						               "value": Math.floor(Math.random() * (850000 - 400000 + 1) ) + 400000
+						            }
+						         ]
+						     }
+
+						  });
+						revenueChart.render();
+						});
+						$('#details-panel').removeClass('hidden');
+
+					} else {
+						console.log("No details for this place.");
+					}
+				});
+
 			}
 
 	    };
