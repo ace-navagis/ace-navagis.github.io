@@ -5,9 +5,9 @@
 
 		var newMap = function(center) {
 	        return new google.maps.Map(document.getElementById('map'), {
-				zoom: 10,
-				center: center,
-				mapTypeId: 'hybrid'
+				zoom: 12,
+				center: center
+				// mapTypeId: 'hybrid'
 			});
 	    };
 

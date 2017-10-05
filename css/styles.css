@@ -91,11 +91,11 @@ label {
     display: none;
 }
 
-.checkbox-grp {
+/*.checkbox-grp {
     margin-top: 5px;
     padding-left: 25px;
     text-align: left;
-}
+}*/
 
 #details-panel {
     width: 350px;
@@ -235,11 +235,26 @@ md-sidenav#sidenav-container {
     top: 50px;
     z-index: 5;
     overflow: hidden;
+    width: 220px;
+    height: 390px;
+    border-radius: 0 3px 3px 0;
 }
 
 md-sidenav#sidenav-container md-toolbar {
     min-height: 45px;
     max-height: 45px;
+    background-color: #2967de;
+}
+
+md-content.checkbox-grp {
+    padding-top: 10px;
+    padding-left: 18px;
+    height: 100%;
+}
+
+md-checkbox.specialty {
+    padding: 0;
+    margin: 8px 0;
 }
 
 md-checkbox.md-checked.blue-check .md-icon {
