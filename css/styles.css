@@ -17,11 +17,9 @@ div {
 h3 {
     /*color: #666;*/
 	text-align: left;
-	font-size: 20px;
+	font-size: 22px;
     font-weight: 400;
-    margin: 0;
-    margin-top: 8px;
-    padding-left: 16px;
+    margin: auto;
 }
 
 button {
@@ -235,20 +233,20 @@ md-sidenav#sidenav-container {
     top: 50px;
     z-index: 5;
     overflow: hidden;
-    width: 220px;
-    height: 390px;
+    width: 312px;
+    height: 238px;
     border-radius: 0 3px 3px 0;
 }
 
 md-sidenav#sidenav-container md-toolbar {
-    min-height: 45px;
-    max-height: 45px;
+    min-height: 51px;
+    max-height: 51px;
     background-color: #2967de;
 }
 
 md-content.checkbox-grp {
     padding-top: 10px;
-    padding-left: 18px;
+    padding-left: 30px;
     height: 100%;
 }
 
@@ -263,4 +261,17 @@ md-checkbox.md-checked.blue-check .md-icon {
 
 md-checkbox.md-checked[disabled].blue-disabled .md-icon {
   background-color:rgba(41, 103, 222, 0.60);
+}
+
+.md-icon-button.sidenav-close {
+    margin: 0;
+    padding: 0;
+    width: 24px;
+    position: absolute;
+    right: 8px;
+    top: 4px;
+}
+
+.sidenav-close md-icon {
+    font-size: 20px;
 }

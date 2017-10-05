@@ -1,16 +1,25 @@
-<md-sidenav md-is-locked-open="$mdMedia('gt-sm')" id="sidenav-container" class="md-whiteframe-18dp">
-    <md-toolbar>
-        <h3>Choose a Specialty</h3>
+<md-sidenav md-is-locked-open="$mdMedia('gt-sm')" id="sidenav-container" class="md-whiteframe-18dp" md-component-id="specialty-options">
+    <md-toolbar layout="row">
+        <h3>Choose Specialty</h3>
+        <md-button class="md-icon-button sidenav-close" md-no-ink aria-label="Close" ng-click="closeSideNav()">
+            <md-icon>close</md-icon>
+        </md-button>
     </md-toolbar>
     <md-content layout="column" class="checkbox-grp">
-        <md-checkbox name="specialty" id="pizza" class="specialty blue-check blue-disabled" ng-model="specialty.pizza" ng-true-value="'restaurant, pizza'" ng-false-value="'pizza'" ng-change="getSpecialty(specialty.pizza)" ng-disabled="loading">Pizza</md-checkbox>
-        <md-checkbox name="specialty" id="pasta" class="specialty blue-check blue-disabled" ng-model="specialty.pasta" ng-true-value="'restaurant, pasta'" ng-false-value="'pasta'" ng-change="getSpecialty(specialty.pasta)" ng-disabled="loading">Pasta</md-checkbox>
-        <md-checkbox name="specialty" id="chicken" class="specialty blue-check blue-disabled" ng-model="specialty.chicken" ng-true-value="'restaurant, chicken'" ng-false-value="'chicken'" ng-change="getSpecialty(specialty.chicken)" ng-disabled="loading">Chicken</md-checkbox>
-        <md-checkbox name="specialty" id="pastry" class="specialty blue-check blue-disabled" ng-model="specialty.pastry" ng-true-value="'restaurant, pastry'" ng-false-value="'pastry'" ng-change="getSpecialty(specialty.pastry)" ng-disabled="loading">Pastry</md-checkbox>
-        <md-checkbox name="specialty" id="desserts" class="specialty blue-check blue-disabled" ng-model="specialty.desserts" ng-true-value="'restaurant, desserts'" ng-false-value="'desserts'" ng-change="getSpecialty(specialty.desserts)" ng-disabled="loading">Desserts</md-checkbox>
-        <md-checkbox name="specialty" id="coffee" class="specialty blue-check blue-disabled" ng-model="specialty.coffee" ng-true-value="'restaurant, coffee'" ng-false-value="'coffee'" ng-change="getSpecialty(specialty.coffee)" ng-disabled="loading">Coffee</md-checkbox>
-        <md-checkbox name="specialty" id="japanese" class="specialty blue-check blue-disabled" ng-model="specialty.japanese" ng-true-value="'restaurant, japanese'" ng-false-value="'japanese'" ng-change="getSpecialty(specialty.japanese)" ng-disabled="loading">Japanese</md-checkbox>
-        <md-checkbox name="specialty" id="korean" class="specialty blue-check blue-disabled" ng-model="specialty.korean" ng-true-value="'restaurant, korean'" ng-false-value="'korean'" ng-change="getSpecialty(specialty.korean)" ng-disabled="loading">Korean</md-checkbox>
+        <div layout="row">
+            <div layout="column" flex>
+                <md-checkbox name="specialty" id="pizza" class="specialty blue-check blue-disabled" ng-model="specialty.pizza" ng-true-value="'restaurant, pizza'" ng-false-value="'pizza'" ng-change="getSpecialty(specialty.pizza)" ng-disabled="loading">Pizza</md-checkbox>
+                <md-checkbox name="specialty" id="pasta" class="specialty blue-check blue-disabled" ng-model="specialty.pasta" ng-true-value="'restaurant, pasta'" ng-false-value="'pasta'" ng-change="getSpecialty(specialty.pasta)" ng-disabled="loading">Pasta</md-checkbox>
+                <md-checkbox name="specialty" id="chicken" class="specialty blue-check blue-disabled" ng-model="specialty.chicken" ng-true-value="'restaurant, chicken'" ng-false-value="'chicken'" ng-change="getSpecialty(specialty.chicken)" ng-disabled="loading">Chicken</md-checkbox>
+                <md-checkbox name="specialty" id="pastry" class="specialty blue-check blue-disabled" ng-model="specialty.pastry" ng-true-value="'restaurant, pastry'" ng-false-value="'pastry'" ng-change="getSpecialty(specialty.pastry)" ng-disabled="loading">Pastry</md-checkbox>
+            </div>
+            <div flex>
+                <md-checkbox name="specialty" id="desserts" class="specialty blue-check blue-disabled" ng-model="specialty.desserts" ng-true-value="'restaurant, desserts'" ng-false-value="'desserts'" ng-change="getSpecialty(specialty.desserts)" ng-disabled="loading">Desserts</md-checkbox>
+                <md-checkbox name="specialty" id="coffee" class="specialty blue-check blue-disabled" ng-model="specialty.coffee" ng-true-value="'restaurant, coffee'" ng-false-value="'coffee'" ng-change="getSpecialty(specialty.coffee)" ng-disabled="loading">Coffee</md-checkbox>
+                <md-checkbox name="specialty" id="japanese" class="specialty blue-check blue-disabled" ng-model="specialty.japanese" ng-true-value="'restaurant, japanese'" ng-false-value="'japanese'" ng-change="getSpecialty(specialty.japanese)" ng-disabled="loading">Japanese</md-checkbox>
+                <md-checkbox name="specialty" id="korean" class="specialty blue-check blue-disabled" ng-model="specialty.korean" ng-true-value="'restaurant, korean'" ng-false-value="'korean'" ng-change="getSpecialty(specialty.korean)" ng-disabled="loading">Korean</md-checkbox>
+            </div>
+        </div>
     </md-content>
 </md-sidenav>
 <div class="load-msg loader hidden"></div>

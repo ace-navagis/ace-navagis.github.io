@@ -3,7 +3,7 @@
 
 	var app = angular.module("mapApp");
 
-	var MainController = function($scope, $compile, mapsApi){
+	var MainController = function($scope, $compile, mapsApi, $mdSidenav){
 		$scope.initialize = function() {
 			//infoBox plugin
 			var s = document.createElement("script");
@@ -17,6 +17,7 @@
 			$scope.getSpecialty = _getSpecialty;
 			$scope.getDirections = _getDirections;
 			$scope.getPlaceDetails = _getPlaceDetails;
+			$scope.closeSideNav = _closeSideNav;
 			var map;
 			var data = [];
 			var compiledData = [];
@@ -586,6 +587,11 @@
 					}
 				});
 
+			}
+
+			function _closeSideNav(){
+				console.log('in close sidenav');
+				$mdSidenav('specialty-options').close();
 			}
 
 	    };
