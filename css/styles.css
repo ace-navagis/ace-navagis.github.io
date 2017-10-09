@@ -97,7 +97,7 @@ label {
 
 #details-panel {
     width: 350px;
-    max-height: 96%;
+    max-height: 94%;
     overflow-y: auto;
     position: absolute;
     top: 4px;
