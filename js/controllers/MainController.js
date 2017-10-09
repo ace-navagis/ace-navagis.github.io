@@ -18,6 +18,7 @@
 			$scope.getDirections = _getDirections;
 			$scope.getPlaceDetails = _getPlaceDetails;
 			$scope.closeSideNav = _closeSideNav;
+			$scope.openSideNav = _openSideNav;
 			var map;
 			var data = [];
 			var compiledData = [];
@@ -267,11 +268,11 @@
 						data = [];
 						compiledData = [];
 						currentSearch = null;
-						$(document).ready(function(){
-							$('.load-msg').addClass('hidden');
-							$('#floating-panel').removeClass('hidden');
+						// $(document).ready(function(){
+						// 	$('.load-msg').addClass('hidden');
+						// 	$('#floating-panel').removeClass('hidden');
 
-						});
+						// });
 					}
 				}
 			}
@@ -404,6 +405,7 @@
 							break;
 					}
 					removeMarkers(specialty);
+					$('#details-panel').addClass('hidden');
 		    	}
 		    }
 
@@ -590,8 +592,13 @@
 			}
 
 			function _closeSideNav(){
-				console.log('in close sidenav');
+				console.log('in open sidenav');
 				$mdSidenav('specialty-options').close();
+			}
+
+			function _openSideNav(){
+				console.log('in open sidenav');
+				$mdSidenav('specialty-options').toggle();
 			}
 
 	    };

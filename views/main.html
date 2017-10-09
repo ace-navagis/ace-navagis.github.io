@@ -1,9 +1,16 @@
-<md-sidenav md-is-locked-open="true" id="sidenav-container" class="md-whiteframe-18dp" md-component-id="specialty-options">
+<md-button id="open-sidenav" class="md-raised" ng-click="openSideNav()">
+    <md-tooltip md-direction="right">
+        Show Categories
+    </md-tooltip>
+    <md-icon>layers</md-icon>
+</md-button>
+<md-sidenav id="sidenav-container" md-disable-backdrop class="md-whiteframe-18dp" md-disable-backdrop md-component-id="specialty-options">
+	 <!-- <md-sidenav class="md-sidenav-left" md-disable-backdrop md-whiteframe="4" md-component-id="specialty-options"> -->
     <md-toolbar layout="row">
         <h3>Choose Specialty</h3>
-        <!-- <md-button class="md-icon-button sidenav-close" md-no-ink aria-label="Close" ng-click="closeSideNav()">
+        <md-button class="md-icon-button sidenav-close" md-no-ink aria-label="Close" ng-click="closeSideNav()">
             <md-icon>close</md-icon>
-        </md-button> -->
+        </md-button>
     </md-toolbar>
     <md-content layout="column" class="checkbox-grp">
         <div layout="row">

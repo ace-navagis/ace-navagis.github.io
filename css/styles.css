@@ -233,7 +233,7 @@ md-sidenav#sidenav-container {
     top: 50px;
     z-index: 5;
     overflow: hidden;
-    width: 312px;
+    width: 254px;
     height: 238px;
     border-radius: 0 3px 3px 0;
 }
@@ -246,7 +246,7 @@ md-sidenav#sidenav-container md-toolbar {
 
 md-content.checkbox-grp {
     padding-top: 10px;
-    padding-left: 30px;
+    padding-left: 17px;
     height: 100%;
 }
 
@@ -268,10 +268,26 @@ md-checkbox.md-checked[disabled].blue-disabled .md-icon {
     padding: 0;
     width: 24px;
     position: absolute;
-    right: 8px;
-    top: 4px;
+    right: 6px;
+    /*top: 4px;*/
 }
 
 .sidenav-close md-icon {
-    font-size: 20px;
+    font-size: 18px;
+}
+
+#open-sidenav {
+    position: absolute;
+    top: 50px;
+    z-index: 4;
+    min-width: 50px;
+    background-color: #fff;
+}
+
+#open-sidenav md-icon {
+    color: #2967de;
+}
+
+md-backdrop.md-sidenav-backdrop {
+    display: none;
 }
