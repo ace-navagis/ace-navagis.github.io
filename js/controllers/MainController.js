@@ -592,12 +592,10 @@
 			}
 
 			function _closeSideNav(){
-				console.log('in open sidenav');
 				$mdSidenav('specialty-options').close();
 			}
 
 			function _openSideNav(){
-				console.log('in open sidenav');
 				$mdSidenav('specialty-options').toggle();
 			}
 
