@@ -1,0 +1,21 @@
+CACHE MANIFEST
+# v1.0 : 10-13-2017
+ 
+CACHE:
+# pages
+index.html
+ 
+# styles & scripts
+css/styles.css
+js/controllers/MainController.js
+js/services/mapsApi.js
+ 
+# images
+img/marker.ico
+images/logo.png
+ 
+NETWORK:
+login.php
+ 
+FALLBACK:
+/ /offline.html
